@@ -1,3 +1,161 @@
+Arduino Radar Project © CC BY-NC-SA
+
+The aim of this Arduino Radar project is to achieve a radar system prototype based on an Arduino board that detects stationary and moving
+
+    radarrobotics
+
+    15,840 views3 comments17 respects
+
+Components and supplies
+Ph a000066 iso (1) ztbmubhmho	Arduino UNO
+	×	1	
+13959 01a	SparkFun Ultrasonic Sensor - HC-SR04
+	×	1	
+Apps and online services
+Ide web	
+Arduino IDE
+	
+About this project
+
+Do you know? the first time, Radar was developed as a method of detecting enemy aircraft in World War 2. Along with the developments in technology, these days it is used in a wide range of sectors. Since the last few decades, there have been significant advancements in the use of radar technology.
+
+In this project, we are going to design an Arduino radar project using Ultrasonic Sensor for detection. An Arduino microcontroller makes electronics more discipline.
+
+This Arduino radar project aims to achieve a radar system prototype based on an Arduino board that detects stationary and moving objects. The radar system has different performance specifications, and it is also available in a variety of sizes.
+
+How does Radar Work?
+
+The word RADAR means Radio Detection And Ranging. Radar is an object detection system that uses microwaves to determine the range, altitude, direction, and speed of objects within about a 100-mile radius of their location.
+
+The radar antenna transmits radio waves or microwaves that bounce off any object in their path. Due to this, we can easily determine the object in the radar range.
+
+This article is sponsored by nextpcb.com
+
+The basic principle of operation:
+
+A radar is an electromagnetic sensor that is used to detect and locate an object.
+
+Radio waves or microwaves are radiated out from the radar into free space. Some of these waves are intercepted by reflecting objects.
+
+These intercepted radio waves hit the target and are reflected in many different directions. Some of these waves can be directed back toward the radar, where they are received and amplified.
+
+If these waves are received again at their origin, then it means an object is in the propagation direction.
+
+The modern radar system is very advanced and used in highly diverse applications such as Air traffic control, Air-defence system, radar Astronomy, Antimissile system, Outer space Surveillance system, and many more.
+
+What is Ultrasonic Sensor?
+
+An ultrasonic sensor is a proximity sensor that is used to measure the distance of a target or object. It detects the object by transmitting ultrasonic waves and converts the reflected waves into an electrical signal. These sound waves travel faster than the speed of the sound that humans can hear.
+
+It has two main components: the transmitter & receiver. The transmitter emits the sound using a piezoelectric crystal, and the receiver encounters the sound after it has travelled to and from the target.
+
+For the calculation of the object distance, the sensor measures the time taken by the signal to travel between the transmission of the sound by the transmitter to the reflecting back towards the receiver.
+
+The formula for this calculation is,
+
+D = ½ T x C
+
+Where,
+
+    D = distance,
+    T = time
+    C = speed of sound which is 343 meters/second.
+
+These sensors are mostly found in automobile self-parking technology and anti-collision safety systems. Also, used in robotic obstacle detection systems, manufacturing technology, and many more. To know more about the ultrasonic sensor.
+
+What is Servo Motor?
+
+The servo motor is a simple DC motor that can be controlled for specific angular rotation with the help of additional servomechanism. This motor will only rotate as much we want and then stop. The servo motor is a closed-loop mechanism that uses positional feedback to control the speed and position.
+
+This closed-loop system includes a control circuit, servo motor, shaft, potentiometer, drive gears, amplifier, and either an encoder or resolver.
+
+The servo motor is unlike a standard electric motor which starts and stops according to the power input. According to the signal, the servo motor will work.
+
+Nowadays, servo motors are widely used in industrial and robotics applications. They are also commonly seen in remote-controlled toy cars, RC planes, and in the CD or DVD player. Besides these, we see hundreds of applications in our daily life that use a servo motor. To know more about the servo motor.
+
+Preparing the Fixture
+
+After making the connections, to build the fixture of this construction, I have used a mounting bracket as shown in the below image to fix the ultrasonic sensor.
+
+This step is optional. You can also make a simple structure with cardboard to mount the ultrasonic sensor with a Servo motor.
+
+Hardware Connection
+
+The below image shows the connection of the Arduino radar project. The connections are very simple. Here, we have interfaced the ultrasonic sensor and servo motor with an Arduino Uno. The connection details are,
+
+Nextpcb
+
+This article is sponsored by nextpcb.com
+
+Nextpcb are also sponsor of this project. Nextpcb, is the one of the largest PCB prototype enterprise in China and a high-tech manufacturer specializing in quick PCB prototype and small-batch PCB production. You can order a minimum of 5 PCBs for just $0 it mean 1st order is free for makers. To get the PCB manufactured simply login Nextpcb.com upload the.zip of the gerber files or you can also drag and drop the.zip files. After uploading the zip file, you’ll see success message at the bottom if the file is successfully uploaded.
+
+Software Installation and Code
+
+We need two software to complete this Arduino radar project. One is Arduino IDE, and the other is Processing IDE. Download both Software from the below links,
+
+    Arduino IDE 1.8.13
+    Processing IDE
+
+Processing application is visual arts-based software for learning to code. After downloading, extract the Zip file, and you will get the processing application (.exe file).
+
+In this project, we are using two codes: Arduino UNO and the other for Processing.
+
+    Here is the Arduino source code:
+
+// Includes the Servo library
+#include <Servo.h>. 
+// Defines Tirg and Echo pins of the Ultrasonic Sensor
+const int trigPin = 10;
+const int echoPin = 11;
+// Variables for the duration and the distance
+long duration;
+int distance;
+Servo myServo; // Creates a servo object for controlling the servo motor
+void setup() {
+  pinMode(trigPin, OUTPUT); // Sets the trigPin as an Output
+  pinMode(echoPin, INPUT); // Sets the echoPin as an Input
+  Serial.begin(9600);
+  myServo.attach(12); // Defines on which pin is the servo motor attached
+}
+void loop() {
+  // rotates the servo motor from 15 to 165 degrees
+  for(int i=15;i<=165;i++){  
+  myServo.write(i);
+  delay(30);
+  distance = calculateDistance();// Calls a function for calculating the distance measured by the Ultrasonic sensor for each degree
+  
+  Serial.print(i); // Sends the current degree into the Serial Port
+  Serial.print(","); // Sends addition character right next to the previous value needed later in the Processing IDE for indexing
+  Serial.print(distance); // Sends the distance value into the Serial Port
+  Serial.print("."); // Sends addition character right next to the previous value needed later in the Processing IDE for indexing
+  }
+  // Repeats the previous lines from 165 to 15 degrees
+  for(int i=165;i>15;i--){  
+  myServo.write(i);
+  delay(30);
+  distance = calculateDistance();
+  Serial.print(i);
+  Serial.print(",");
+  Serial.print(distance);
+  Serial.print(".");
+  }
+}
+// Function for calculating the distance measured by the Ultrasonic sensor
+int calculateDistance(){ 
+  
+  digitalWrite(trigPin, LOW); 
+  delayMicroseconds(2);
+  // Sets the trigPin on HIGH state for 10 micro seconds
+  digitalWrite(trigPin, HIGH); 
+  delayMicroseconds(10);
+  digitalWrite(trigPin, LOW);
+  duration = pulseIn(echoPin, HIGH); // Reads the echoPin, returns the sound wave travel time in microseconds
+  distance= duration*0.034/2;
+  return distance;
+}
+
+    Here is the processing code for the Arduino radar project:
+
 import processing.serial.*; // imports library for serial communication
 import java.awt.event.KeyEvent; // imports library for reading the data from the serial port
 import java.io.IOException;
@@ -16,7 +174,7 @@ void setup() {
   
  size (1200, 700); // ***CHANGE THIS TO YOUR SCREEN RESOLUTION***
  smooth();
- myPort = new Serial(this,"/dev/ttyACM0", 9600); // starts the serial communication
+ myPort = new Serial(this,"COM5", 9600); // starts the serial communication
  myPort.bufferUntil('.'); // reads the data from the serial port up to the character '.'. So actually it reads this: angle,distance.
 }
 void draw() {
